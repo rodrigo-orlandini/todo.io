@@ -7,6 +7,8 @@ import Router from "./routes/Router";
 
 import { RealmContextProvider } from "./contexts/RealmContext";
 
+import { THEME } from "./style/theme";
+
 const App = () => {
 
 	const init = () => {
@@ -19,7 +21,7 @@ const App = () => {
 
 	return (
 		<RealmContextProvider>
-			<NativeBaseProvider>
+			<NativeBaseProvider theme={THEME}>
 				<StatusBar 
 					barStyle="light-content"
 					backgroundColor="transparent"

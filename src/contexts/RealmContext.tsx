@@ -2,6 +2,7 @@ import { createContext, ReactNode, useState, useEffect } from 'react';
 import Realm from 'realm';
 
 import { bootstrap } from '../libs/realm';
+import { Omit } from '../libs/omit';
 
 import { FolderProps } from '../models/folder';
 import { TaskProps } from '../models/task';
@@ -10,8 +11,10 @@ export interface RealmContextDataProps {
     isLoading: boolean;
     folders: FolderProps[];
     tasks: TaskProps[];
-    createFolder: ({ data }: CreateFolderProps) => FolderProps | boolean;
-    createTask: ({ data }: CreateTaskProps) => TaskProps | boolean;
+    createFolder: ({ name, tasks }: CreateFolderProps) => FolderProps | boolean;
+    createTask: ({ name, frequency, folderId }: CreateTaskProps) => TaskProps | boolean;
+    deleteTask: ({ task }: DeleteTaskProps) => void;
+    deleteFolder: ({ folder }: DeleteFolderProps) => void;
     completeTask: ({ task }: CompleteTaskProps) => void;
 }
 
@@ -19,16 +22,21 @@ interface RealmProviderProps {
     children: ReactNode
 }
 
-interface CreateFolderProps { 
-    data: FolderProps;
-}
+interface CreateFolderProps extends Omit<FolderProps, 'id' | 'createdAt'> {}
 
-interface CreateTaskProps { 
-    data: TaskProps;
+interface CreateTaskProps extends Omit<TaskProps, 'id' | 'createdAt' | 'isDone'> { 
     folderId: number;
 }
 
 interface CompleteTaskProps {
+    task: TaskProps;
+}
+
+interface DeleteFolderProps {
+    folder: FolderProps;
+}
+
+interface DeleteTaskProps {
     task: TaskProps;
 }
 
@@ -58,20 +66,41 @@ export const RealmContextProvider = ({ children }: RealmProviderProps) => {
         setIsLoading(false);
     }
 
-    const createFolder = ({ data }: CreateFolderProps) => {
+    const createFolder = ({ name, tasks=[] }: CreateFolderProps) => {
+        setIsLoading(true);
+
         var folder: FolderProps = {} as FolderProps;
         realm?.write(() => {
-            folder = realm.create("Folder", { ...data });
+            folder = realm.create("Folder", {
+                id: getCurrentFolderId() + 1,
+                name,
+                createdAt: new Date(),
+                tasks
+            });
         });
+
+        if(realm) {
+            //@ts-ignore
+            setFolders(realm.objects("Folder"));
+        }
+
+        setIsLoading(false);
         return folder;
     }
 
-    const createTask = ({ data, folderId }: CreateTaskProps) => {
+    const createTask = ({ name, frequency, expirationDate, folderId }: CreateTaskProps) => {
         var task: TaskProps = {} as TaskProps;
         const taskFolder = folders.filter((folder: FolderProps) => folder.id === folderId)[0];
 
         realm?.write(() => {
-            task = realm.create("Task", { ...data });
+            task = realm.create("Task", { 
+                id: getCurrentTaskId() + 1,
+                name,
+                frequency,
+                isDone: false,
+                createdAt: new Date(),
+                expirationDate
+            });
             taskFolder.tasks?.push(task);
         });
 
@@ -82,15 +111,36 @@ export const RealmContextProvider = ({ children }: RealmProviderProps) => {
         realm?.write(() => {
             task.isDone = true;
         });
+
+        //@ts-ignore
+        setTasks(realm?.objects("Task"));
+    }
+
+    const deleteTask = ({ task }: DeleteTaskProps) => {
+        realm?.write(() => {
+            realm.delete(task);
+        });
+
+        //@ts-ignore
+        setTasks(realm?.objects("Task"));
+    }
+
+    const deleteFolder = ({ folder }: DeleteFolderProps) => {
+        realm?.write(() => {
+            realm.delete(folder);
+        });
+
+        //@ts-ignore
+        setFolders(realm?.objects("Folder"));
     }
 
     const getCurrentTaskId = (): number => {
-        const id = tasks[(tasks.length - 1)].id
+        const id = tasks.length > 0 ? tasks[(tasks.length - 1)].id : 0;
         return id ? id : 0;
     }
 
     const getCurrentFolderId = (): number => {
-        const id = folders[(folders.length - 1)].id
+        const id = folders.length > 0 ? folders[(folders.length - 1)].id : 0;
         return id ? id : 0;
     }
 
@@ -105,6 +155,8 @@ export const RealmContextProvider = ({ children }: RealmProviderProps) => {
             tasks,
             createFolder,
             createTask,
+            deleteFolder,
+            deleteTask,
             completeTask
         }}>
             { children }

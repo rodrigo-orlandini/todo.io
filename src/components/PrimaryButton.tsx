@@ -1,15 +1,12 @@
 import React from "react";
-import { Pressable, Heading, useTheme } from 'native-base';
+import { Pressable, Heading } from 'native-base';
 
-interface ButtonProps {
+interface PrimaryButtonProps {
     text: string;
     onPress: () => void;
 }
 
-const Button = ({ text, onPress }: ButtonProps) => {
-
-    const { colors } = useTheme();
-
+const PrimaryButton = ({ text, onPress }: PrimaryButtonProps) => {
     return (
         <Pressable 
             backgroundColor="darkBlue.700" 
@@ -27,4 +24,4 @@ const Button = ({ text, onPress }: ButtonProps) => {
     );
 }
 
-export default Button;
+export default PrimaryButton;

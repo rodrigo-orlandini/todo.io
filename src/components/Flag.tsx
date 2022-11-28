@@ -32,9 +32,9 @@ const Flag = ({ date }: FlagProps) => {
         bgColor = colors.red[500];
         textColor = colors.white;
     } else {
-        flag = "HOJE";
+        flag = dayjs(date).locale(ptBR).format("DD[/]MM[/]YY");
         bgColor = colors.blue[500];
-        textColor = colors.white;
+        textColor = colors.darkBlue[700];
     }
 
 

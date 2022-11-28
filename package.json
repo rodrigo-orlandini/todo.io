@@ -10,6 +10,7 @@
     "add-splash": "npx react-native generate-bootsplash assets/bootsplash_logo_original.png --background-color=3C4655 --logo-width=140 --assets-path=assets --flavor=main"
   },
   "dependencies": {
+    "@react-native-community/datetimepicker": "^6.7.1",
     "@react-navigation/native": "^6.0.14",
     "@react-navigation/native-stack": "^6.9.2",
     "dayjs": "^1.11.6",
