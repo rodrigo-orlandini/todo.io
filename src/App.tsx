@@ -1,9 +1,8 @@
 import React, { useEffect } from "react";
-import { NavigationContainer } from "@react-navigation/native";
 import { NativeBaseProvider, StatusBar } from 'native-base';
 import RNBootSplash from 'react-native-bootsplash';
 
-import Router from "./routes/Router";
+import Home from "./screens/Home";
 
 import { RealmContextProvider } from "./contexts/RealmContext";
 
@@ -27,10 +26,7 @@ const App = () => {
 					backgroundColor="transparent"
 					translucent={true}
 				/>
-
-				<NavigationContainer>
-					<Router />
-				</NavigationContainer>
+					<Home />
 			</NativeBaseProvider>
 		</RealmContextProvider>
 	);

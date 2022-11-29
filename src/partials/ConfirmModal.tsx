@@ -2,7 +2,7 @@ import React from 'react';
 import { Heading, HStack } from 'native-base';
 
 import ModalShape, { GenericModalProps } from '../components/Modal';
-import SecondaryButton from '../components/SecondaryButton';
+import Button from '../components/Button';
 
 interface ConfirmModalProps extends GenericModalProps {
     text: string;
@@ -26,8 +26,8 @@ const ConfirmModal = ({ visible, setVisible, text, setConfirmation }: ConfirmMod
             <Heading fontSize="sm">{text}</Heading>
 
             <HStack width="full" justifyContent="space-between" marginTop={4}>
-                <SecondaryButton text='CONFIRMAR' onPress={handleConfirm} />
-                <SecondaryButton text='CANCELAR' onPress={handleCancel} color="red.700" />
+                <Button text='CONFIRMAR' onPress={handleConfirm} />
+                <Button text='CANCELAR' onPress={handleCancel} color="red.700" />
             </HStack>
         </ModalShape>
     );

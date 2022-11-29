@@ -53,7 +53,7 @@ export const RealmContextProvider = ({ children }: RealmProviderProps) => {
         setIsLoading(true);
 
         const realm = await bootstrap();
-        
+
         //@ts-ignore
         const tasks: TaskProps[] = realm.objects("Task");  
         //@ts-ignore

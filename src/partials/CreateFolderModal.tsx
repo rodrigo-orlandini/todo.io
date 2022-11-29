@@ -3,7 +3,7 @@ import { Heading, HStack, useToast } from 'native-base';
 
 import ModalShape, { GenericModalProps } from '../components/Modal';
 import Input, { GenericInputProps } from '../components/Input';
-import SecondaryButton from '../components/SecondaryButton';
+import Button from '../components/Button';
 
 import { useRealm } from '../hooks/useRealm';
 
@@ -35,7 +35,7 @@ const CreateFolderModal = ({ visible, setVisible, value, setValue }: CreateFolde
             <Input value={value} setValue={setValue} placeholder='Nome da pasta'/>
 
             <HStack width="full" justifyContent="flex-end">
-                <SecondaryButton text="CRIAR" onPress={handleCreateFolder} icon="go" />
+                <Button text="CRIAR" onPress={handleCreateFolder} icon="go" />
             </HStack>
         </ModalShape>
     );

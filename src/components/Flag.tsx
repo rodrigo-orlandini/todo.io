@@ -37,7 +37,6 @@ const Flag = ({ date }: FlagProps) => {
         textColor = colors.darkBlue[700];
     }
 
-
     return (
         <Box backgroundColor={bgColor} paddingX="2" paddingY="1" rounded="lg" marginLeft="3">
             <Heading fontSize="xs" color={textColor}>{flag}</Heading>

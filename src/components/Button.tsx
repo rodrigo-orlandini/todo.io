@@ -4,14 +4,14 @@ import { Pressable, Heading, ChevronRightIcon, CloseIcon } from 'native-base';
 
 import CalendarIcon from '../assets/Calendar.svg';
 
-interface SecondaryButtonProps {
+interface ButtonProps {
     text: string;
     onPress: () => void;
     icon?: "go" | "calendar" | "close";
     color?: "white" | "red.700";
 }
 
-const SecondaryButton = ({ text, onPress, icon, color="white" }: SecondaryButtonProps) => {
+const Button = ({ text, onPress, icon, color="white" }: ButtonProps) => {
     return (
         <Pressable 
             backgroundColor={color === "white" ? "darkBlue.700" : "red.500"}
@@ -41,4 +41,4 @@ const SecondaryButton = ({ text, onPress, icon, color="white" }: SecondaryButton
     );
 }
 
-export default SecondaryButton;
+export default Button;

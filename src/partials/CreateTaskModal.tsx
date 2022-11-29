@@ -6,7 +6,7 @@ import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/dat
 
 import ModalShape, { GenericModalProps } from '../components/Modal';
 import Input, { GenericInputProps } from '../components/Input';
-import SecondaryButton from '../components/SecondaryButton';
+import Button from '../components/Button';
 
 import { useRealm } from '../hooks/useRealm';
 
@@ -96,10 +96,21 @@ const CreateTaskModal = ({ visible, setVisible, value, setValue, folderId }: Cre
             });
         }
 
+        let followDate = expirationDate;
+        if(frequency !== 'once') {
+            followDate = new Date(String(
+                dayjs(new Date()).add(
+                    sortDaysInArray().indexOf(selectedDate[0])
+                    , 'day'
+                ))
+            );
+            followDate.setMilliseconds(0);
+        }
+
         createTask({ 
             name: value,
             frequency,
-            expirationDate,
+            expirationDate: followDate,
             folderId 
         });
 
@@ -156,7 +167,7 @@ const CreateTaskModal = ({ visible, setVisible, value, setValue, folderId }: Cre
             </HStack>
 
             <HStack width="full" justifyContent="space-between" flexWrap="wrap" marginBottom={6}>
-                <SecondaryButton 
+                <Button 
                     text={expirationDate.getMilliseconds() === 0 ? 
                         dayjs(expirationDate).locale(ptBR).format("DD[/]MM[/]YY") :
                         "SELECIONAR DATA"
@@ -164,11 +175,11 @@ const CreateTaskModal = ({ visible, setVisible, value, setValue, folderId }: Cre
                     icon="calendar"
                     onPress={() => setShowCalendar(true)} 
                 />
-                <SecondaryButton text="LIMPAR" onPress={handleClear} icon="close" color='red.700'/>
+                <Button text="LIMPAR" onPress={handleClear} icon="close" color='red.700'/>
             </HStack>
 
             <HStack width="full" justifyContent="flex-end">
-                <SecondaryButton text="CRIAR" onPress={handleCreateTask} icon="go" />
+                <Button text="CRIAR" onPress={handleCreateTask} icon="go" />
             </HStack>
 
             {showCalendar && (

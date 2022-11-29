@@ -4,8 +4,7 @@ import { FlatList, Heading, HStack, VStack, Text, Divider } from 'native-base';
 import Header from '../components/Header';
 import Body from '../components/Body';
 import Folder from '../components/Folder';
-import EmptyFolder from '../components/EmptyFolder';
-import PrimaryButton from '../components/PrimaryButton';
+import EmptyFolder from '../partials/EmptyFolder';
 import Loading from '../components/Loading';
 import IconButton from '../components/IconButton';
 
@@ -64,11 +63,6 @@ const Home = () => {
                         />
                     </VStack>
                 )}
-
-                <PrimaryButton 
-                    text='Ver meu desempenho'
-                    onPress={() => console.log("DESEMPENHO")}
-                />
             </Body>
 
             <CreateFolderModal 

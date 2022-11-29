@@ -11,8 +11,6 @@
   },
   "dependencies": {
     "@react-native-community/datetimepicker": "^6.7.1",
-    "@react-navigation/native": "^6.0.14",
-    "@react-navigation/native-stack": "^6.9.2",
     "dayjs": "^1.11.6",
     "native-base": "^3.4.22",
     "react": "18.1.0",

@@ -5,7 +5,7 @@ import { FolderProps } from '../models/folder'
 import { TaskProps } from '../models/task';
 
 import IconButton from '../components/IconButton';
-import EmptyTask from '../components/EmptyTask';
+import EmptyTask from '../partials/EmptyTask';
 import Task from '../components/Task';
 
 import ConfirmModal from '../partials/ConfirmModal';
@@ -48,6 +48,7 @@ const Folder = ({ data, setFolderId, setCreateTaskModalVisibility }: FolderDataP
     return (
         <VStack marginBottom={8}>
             <Pressable 
+                onPress={handleAddTask}
                 delayLongPress={1500} 
                 onLongPress={() => setConfirmationModalVisibility(true)} 
                 _pressed={{ opacity: 0.5 }}
@@ -57,8 +58,6 @@ const Folder = ({ data, setFolderId, setCreateTaskModalVisibility }: FolderDataP
                         <Heading marginRight={4} fontSize="xl">
                             { data.name }
                         </Heading>
-
-                        <IconButton iconName='down' onPress={() => console.log("here")}/>
                     </HStack>
 
                     <HStack alignItems="center">

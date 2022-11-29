@@ -1,13 +1,11 @@
 import React, { ReactNode } from 'react';
-import { VStack, useTheme } from 'native-base';
+import { VStack } from 'native-base';
 
 interface BodyProps {
     children: ReactNode;
 }
 
 const Body = ({ children }: BodyProps) => {
-
-    const { sizes } = useTheme();
 
     return (
         <VStack 

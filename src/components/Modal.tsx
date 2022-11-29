@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { Box, Modal } from 'native-base';
+import { Modal } from 'native-base';
 
 import IconButton from './IconButton';
 
