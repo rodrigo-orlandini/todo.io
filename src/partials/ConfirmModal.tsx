@@ -26,8 +26,8 @@ const ConfirmModal = ({ visible, setVisible, text, setConfirmation }: ConfirmMod
             <Heading fontSize="sm">{text}</Heading>
 
             <HStack width="full" justifyContent="space-between" marginTop={4}>
-                <Button text='CONFIRMAR' onPress={handleConfirm} />
                 <Button text='CANCELAR' onPress={handleCancel} color="red.700" />
+                <Button text='CONFIRMAR' onPress={handleConfirm} />
             </HStack>
         </ModalShape>
     );

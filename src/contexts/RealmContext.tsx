@@ -1,8 +1,11 @@
 import { createContext, ReactNode, useState, useEffect } from 'react';
 import Realm from 'realm';
+import dayjs from 'dayjs';
 
 import { bootstrap } from '../libs/realm';
 import { Omit } from '../libs/omit';
+import { notify } from '../libs/notifee';
+import { getNextWeekdayDate, days } from '../libs/dateHandler';
 
 import { FolderProps } from '../models/folder';
 import { TaskProps } from '../models/task';
@@ -95,7 +98,7 @@ export const RealmContextProvider = ({ children }: RealmProviderProps) => {
         realm?.write(() => {
             task = realm.create("Task", { 
                 id: getCurrentTaskId() + 1,
-                name,
+                name: frequency === "once" ? name : `${name} (1)`,
                 frequency,
                 isDone: false,
                 createdAt: new Date(),
@@ -107,10 +110,31 @@ export const RealmContextProvider = ({ children }: RealmProviderProps) => {
         return task;
     }
 
-    const completeTask = ({ task }: CompleteTaskProps) => {
-        realm?.write(() => {
-            task.isDone = true;
-        });
+    const completeTask = async ({ task }: CompleteTaskProps) => {
+        if(task.frequency === "once") {
+            realm?.write(() => {
+                task.isDone = true;
+            });
+        } else {
+            const selectedDate = task.frequency.split(',');
+            const day = selectedDate.sort((a, b) => days.indexOf(a) - days.indexOf(b))[0];
+
+            // @ts-ignore
+            const followDate = getNextWeekdayDate(day);
+
+            const name = task.name;
+            const numberIndex = name.indexOf("(");
+
+            realm?.write(() => {
+                task.name = `${name.slice(0, numberIndex).trim()} (${Number(name.slice(numberIndex + 1, name.length - 1)) + 1})`;
+                task.createdAt = new Date();
+                task.isDone = false;
+                task.expirationDate = followDate;
+            });
+
+            await notify(followDate, task);
+        }
+
 
         //@ts-ignore
         setTasks(realm?.objects("Task"));
@@ -127,6 +151,7 @@ export const RealmContextProvider = ({ children }: RealmProviderProps) => {
 
     const deleteFolder = ({ folder }: DeleteFolderProps) => {
         realm?.write(() => {
+            realm.delete(folder.tasks);
             realm.delete(folder);
         });
 

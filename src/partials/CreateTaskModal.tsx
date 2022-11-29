@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Divider, FlatList, Heading, HStack, Pressable, Text, useTheme, useToast } from 'native-base';
+import { Divider, FlatList, Heading, HStack, Pressable, Text, useToast } from 'native-base';
+import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import dayjs from 'dayjs';
 import ptBR from 'dayjs/locale/pt-br';
-import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 
 import ModalShape, { GenericModalProps } from '../components/Modal';
 import Input, { GenericInputProps } from '../components/Input';
@@ -10,13 +10,15 @@ import Button from '../components/Button';
 
 import { useRealm } from '../hooks/useRealm';
 
+import { notify } from '../libs/notifee';
+import { days, getNextWeekdayDate, getSortedDays } from '../libs/dateHandler';
+
 interface CreateTaskModalProps extends GenericModalProps, GenericInputProps {
     folderId: number;
 }
 
 const CreateTaskModal = ({ visible, setVisible, value, setValue, folderId }: CreateTaskModalProps) => {
 
-    const days = ['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB'];
     const current = new Date();
 
     const { createTask } = useRealm();
@@ -25,24 +27,6 @@ const CreateTaskModal = ({ visible, setVisible, value, setValue, folderId }: Cre
     const [selectedDate, setSelectedDate] = useState<string[]>([]);
     const [expirationDate, setExpirationDate] = useState<Date>(current);
     const [showCalendar, setShowCalendar] = useState<boolean>(false);
-
-    const sortDaysInArray = () => {
-        const today = dayjs(new Date()).locale(ptBR).format('ddd').toUpperCase();
-        const index = days.indexOf(today);
-
-        let sortedDays = [];
-        for(let i = 0; i < 7; i++) {
-            let addIndex = index + i;
-            
-            if(addIndex >= 7) {
-                addIndex = addIndex - 7;
-            }
-
-            sortedDays.push(days[addIndex]);
-        }
-
-        return sortedDays;
-    }
 
     const handleDaySelection = (day: string) => {
         if(selectedDate.includes(day)) {
@@ -71,7 +55,7 @@ const CreateTaskModal = ({ visible, setVisible, value, setValue, folderId }: Cre
         }
     }
 
-    const handleCreateTask = () => {
+    const handleCreateTask = async () => {
         if(value.trim().length === 0) {
             return toast.show({
                 title: "Dê um nome para sua tarefa.",
@@ -81,7 +65,7 @@ const CreateTaskModal = ({ visible, setVisible, value, setValue, folderId }: Cre
         }
         
         let frequency = 'once';
-        
+
         if(selectedDate.length === 7) {
             frequency = 'daily';
         } else if(selectedDate.length !== 0) {
@@ -97,22 +81,22 @@ const CreateTaskModal = ({ visible, setVisible, value, setValue, folderId }: Cre
         }
 
         let followDate = expirationDate;
+
         if(frequency !== 'once') {
-            followDate = new Date(String(
-                dayjs(new Date()).add(
-                    sortDaysInArray().indexOf(selectedDate[0])
-                    , 'day'
-                ))
-            );
-            followDate.setMilliseconds(0);
+            // @ts-ignore
+            followDate = getNextWeekdayDate(selectedDate[0]);
         }
 
-        createTask({ 
+        const task = createTask({ 
             name: value,
             frequency,
             expirationDate: followDate,
             folderId 
         });
+
+        if(typeof task === 'object') {
+            await notify(followDate, task);
+        }
 
         setExpirationDate(current);
         setSelectedDate([]);
@@ -133,7 +117,7 @@ const CreateTaskModal = ({ visible, setVisible, value, setValue, folderId }: Cre
 
             <HStack marginTop="2">
                 <FlatList 
-                    data={sortDaysInArray()}
+                    data={getSortedDays()}
                     keyExtractor={(item) => item}
                     renderItem={({ item }) => (
                         <Pressable

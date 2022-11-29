@@ -19,11 +19,11 @@ const Flag = ({ date }: FlagProps) => {
     var bgColor: string;
     var textColor: string;
 
-    if(today === expiration) {
+    if(today.get("date") === expiration.get("date")) {
         flag = "HOJE";
         bgColor = colors.orange[500];
-        textColor = colors.black;
-    } else if(tomorrow === expiration) {
+        textColor = colors.orange[700];
+    } else if(tomorrow.get("date") === expiration.get("date")) {
         flag = "AMANHÃ";
         bgColor = colors.yellow[500];
         textColor = colors.black;
