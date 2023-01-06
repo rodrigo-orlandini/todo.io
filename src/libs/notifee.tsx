@@ -24,13 +24,18 @@ export const notify = async (date: Date, task: TaskProps) => {
         timestamp: date.getTime()
     }
 
+    const channelId = await notifee.createChannel({
+        id: 'todo.io',
+        name: 'todo.io'
+    });
+
     await notifee.createTriggerNotification({
         title: 'Você precisa fazer isso hoje!',
         body: task.name,
         android: {
-			channelId: "todo.io",
+			channelId,
 			pressAction: {
-				id: 'todoio',
+				id: 'todo.io',
 			},
         }
     }, trigger);

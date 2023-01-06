@@ -1,4 +1,7 @@
 {
   "name": "ToDoIO",
-  "displayName": "ToDoIO"
+  "displayName": "ToDo.io",
+  "react-native-google-mobile-ads": {
+    "android_app_id": "ca-app-pub-9485598309849370~9853498850"
+  }
 }

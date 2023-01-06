@@ -1,4 +1,4 @@
-package com.todoio.newarchitecture;
+package com.rodrigoorlandini.todoio.newarchitecture;
 
 import android.app.Application;
 import androidx.annotation.NonNull;
@@ -19,9 +19,9 @@ import com.facebook.react.fabric.CoreComponentsRegistry;
 import com.facebook.react.fabric.FabricJSIModuleProvider;
 import com.facebook.react.fabric.ReactNativeConfig;
 import com.facebook.react.uimanager.ViewManagerRegistry;
-import com.todoio.BuildConfig;
-import com.todoio.newarchitecture.components.MainComponentsRegistry;
-import com.todoio.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
+import com.rodrigoorlandini.todoio.BuildConfig;
+import com.rodrigoorlandini.todoio.newarchitecture.components.MainComponentsRegistry;
+import com.rodrigoorlandini.todoio.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
 import java.util.ArrayList;
 import java.util.List;
 

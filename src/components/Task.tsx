@@ -10,7 +10,7 @@ import Flag from '../components/Flag';
 import ConfirmModal from '../partials/ConfirmModal';
 
 interface TaskComponentProps {
-    data: TaskProps
+    data: TaskProps;
 }
 
 const Task = ({ data }: TaskComponentProps) => {
@@ -38,7 +38,12 @@ const Task = ({ data }: TaskComponentProps) => {
     }, [deleteConfirmation]);
 
     return (
-        <Pressable onPress={onCheck} delayLongPress={1500} onLongPress={() => setConfirmationModalVisibility(true)}>
+        <Pressable 
+            onPress={onCheck} 
+            delayLongPress={1500} 
+            onLongPress={() => setConfirmationModalVisibility(true)}
+            _pressed={{ opacity: 0.5 }}
+        >
             <HStack marginTop={2} alignItems="center" flexWrap="wrap">
                 <Pressable 
                     width="4"
@@ -49,6 +54,7 @@ const Task = ({ data }: TaskComponentProps) => {
                     borderColor="blue.300"
                     marginBottom={2}
                     onPress={onCheck}
+                    _pressed={{ opacity: 0.5 }}
                 />
 
                 <Text fontSize="md" marginLeft={2}>{data.name}</Text>

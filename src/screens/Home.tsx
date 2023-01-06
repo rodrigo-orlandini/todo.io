@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FlatList, Heading, HStack, VStack, Text, Divider } from 'native-base';
+import { FlatList, Heading, HStack, VStack, Text, Divider, Pressable } from 'native-base';
 
 import Header from '../components/Header';
 import Body from '../components/Body';
@@ -32,15 +32,20 @@ const Home = () => {
             <Header />
 
             <Body>
-                <HStack justifyContent="space-between">
-                    <Heading fontSize="xl">Minhas pastas</Heading>
+                <Pressable
+                    onPress={() => setCreateFolderModalVisibility(true)}
+                    _pressed={{ opacity: 0.5 }}
+                >
+                    <HStack justifyContent="space-between">
+                        <Heading fontSize="xl">Minhas pastas</Heading>
 
-                    <HStack alignItems="center">
-                        <IconButton iconName='add' onPress={() => setCreateFolderModalVisibility(true)}/>
+                        <HStack alignItems="center">
+                            <IconButton iconName='add' onPress={() => setCreateFolderModalVisibility(true)}/>
 
-                        <Text fontSize="md" marginLeft={6} color="gray.900">{ folders.length || 0 }</Text>
+                            <Text fontSize="md" marginLeft={6} color="gray.900">{ folders.length || 0 }</Text>
+                        </HStack>
                     </HStack>
-                </HStack>
+                </Pressable>
 
                 <Divider color="darkBlue.700" marginTop={5} marginBottom={8} />
 

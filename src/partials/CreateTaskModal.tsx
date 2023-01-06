@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Divider, FlatList, Heading, HStack, Pressable, Text, useToast } from 'native-base';
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import dayjs from 'dayjs';
@@ -12,9 +12,10 @@ import { useRealm } from '../hooks/useRealm';
 
 import { notify } from '../libs/notifee';
 import { days, getNextWeekdayDate, getSortedDays } from '../libs/dateHandler';
+import { interstitial } from "../libs/admob";
 
 interface CreateTaskModalProps extends GenericModalProps, GenericInputProps {
-    folderId: number;
+folderId: number;
 }
 
 const CreateTaskModal = ({ visible, setVisible, value, setValue, folderId }: CreateTaskModalProps) => {
@@ -56,6 +57,11 @@ const CreateTaskModal = ({ visible, setVisible, value, setValue, folderId }: Cre
     }
 
     const handleCreateTask = async () => {
+        if(interstitial.loaded) {
+            interstitial.show();
+            interstitial.load();
+        }
+
         if(value.trim().length === 0) {
             return toast.show({
                 title: "Dê um nome para sua tarefa.",
@@ -93,8 +99,8 @@ const CreateTaskModal = ({ visible, setVisible, value, setValue, folderId }: Cre
             expirationDate: followDate,
             folderId 
         });
-
-        if(typeof task === 'object') {
+        
+        if(followDate.getDate() !== new Date().getDate() && typeof task === 'object') {
             await notify(followDate, task);
         }
 
@@ -128,7 +134,7 @@ const CreateTaskModal = ({ visible, setVisible, value, setValue, folderId }: Cre
                             paddingY="2"
                             marginRight="2"
                             rounded="xl"
-                            _pressed={{ opacity: 0.9 }}
+                            _pressed={{ opacity: 0.8 }}
                             onPress={() => handleDaySelection(item)}
                         >
                             <Heading 
